@@ -2,13 +2,13 @@ package DatabaseControllers;
 
 import Classes.Employee;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,8 +27,13 @@ public class MainController {
         if(databaseConnection == null)
         {
             try {
-               String connectString = "jdbc:mysql://meru.hhs.nl:3306/14066742";
-               databaseConnection = DriverManager.getConnection(connectString, "14066742", "udahshooVi");
+                try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               String connectString = "jdbc:sqlserver://localhost:1433;;DatabaseName=OutdoorParadise;integratedSecurity=true";
+               databaseConnection = DriverManager.getConnection(connectString);
             } catch (SQLException ex) {
                 System.out.println("DB error " + ex);
             }
@@ -40,92 +45,51 @@ public class MainController {
      * In de query zou ik zelf een LIMIT 10 doen o.i.d.
      * @return ArrayList
      */
-    public ArrayList getEmployees() {
-        
+public ArrayList getEmployees() {
         ArrayList employees = new ArrayList();
         
-        //Testdata aanmaken
-        Employee emp1 = new Employee();
-        emp1.setEmp_id(1);
-        emp1.setEmp_fname("Henk");
-        emp1.setEmp_lname("Baksteen");
-        emp1.setUnit_id(1);
-        emp1.setStreet("Bakstraat 5");
-        emp1.setCity("Baktown");
-        emp1.setState("BS");
-        emp1.setZip_code("12345");
-        emp1.setStatus("a");
-        emp1.setSs_number("025487133");
-        emp1.setSalary(1200000);
-        Date date = new Date(250000);
-        emp1.setStart_date(date);
-        emp1.setTermination_date(date);
-        emp1.setBirth_date(date);
-        emp1.setBene_health_ins("Y");
-        emp1.setBene_life_ins("Y");
-        emp1.setBene_day_care("Y");
-        emp1.setSex("M");
-        Timestamp timestamp = new Timestamp(21332121);
-        emp1.setDate_hired(timestamp);
-        emp1.setFax("+33 1 68 94 56 60");
-        emp1.setEmail("henk@baksteen.com");
-        emp1.setWork_phone("+33 1 68 94 52 20");
-        emp1.setExtension("007");
-        emp1.setJob_id(1);
-        emp1.setSales_branch_code(6);
-        
-        //employee nr 2
-        Employee emp2 = new Employee();
-        emp2.setEmp_id(2);
-        emp2.setEmp_fname("Donald");
-        emp2.setEmp_lname("Duck");
-        emp2.setUnit_id(1);
-        emp2.setStreet("Quack Street 1113");
-        emp2.setCity("Duckstad");
-        emp2.setState("DS");
-        emp2.setZip_code("12345");
-        emp2.setStatus("a");
-        emp2.setSs_number("125675433");
-        emp2.setSalary(5100000);
-        emp2.setStart_date(date);
-        emp2.setTermination_date(date);
-        emp2.setBirth_date(date);
-        emp2.setBene_health_ins("Y");
-        emp2.setBene_life_ins("Y");
-        emp2.setBene_day_care("Y");
-        emp2.setSex("M");
-        emp2.setDate_hired(timestamp);
-        emp2.setFax("+33 1 68 94 56 61");
-        emp2.setEmail("d.duck@ducktown.com");
-        emp2.setWork_phone("+33 1 68 94 52 20");
-        emp2.setExtension("001");
-        emp2.setJob_id(1);
-        emp2.setSales_branch_code(6);
-        
-        //ArrayList vullen met onze zelfgemaakte employees
-        employees.add(emp1);
-        employees.add(emp2);
-        
-        //einde testdata
-        
-        //Echte data vullen doormiddel van een query
-        
-//        try {
-//            String query = "";
-//            PreparedStatement statement = databaseConnection.prepareStatement(query);
-//            ResultSet results = statement.executeQuery();
-//            while(results.next())
-//            {
-//                Employee emp = new Employee();
-//                //Set the employee data
-//                
-//                //Add employee to ArrayList
-//                employees.add(emp);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Kan gegevens niet ophalen " + ex);
-//        }       
-//        //return ArrayList
+        try {
+            String query = "SELECT * FROM Employee";
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+            
+            while(result.next())
+            {
+                Employee emp = new Employee();
+                
+                emp.setEmp_id(result.getInt("emp_id"));
+                emp.setManager_id(result.getInt("manager_id"));
+                emp.setEmp_fname(result.getString("emp_fname"));
+                emp.setEmp_lname(result.getString("emp_lname"));
+                emp.setUnit_id(result.getInt("unit_id"));
+                emp.setStreet(result.getString("street"));
+                emp.setCity(result.getString("city"));
+                emp.setState(result.getString("state"));
+                emp.setStatus(result.getString("status"));
+                emp.setSs_number(result.getString("ss_number"));
+                emp.setSalary(result.getFloat("salary"));
+                emp.setStart_date(result.getDate("start_date"));
+                emp.setTermination_date(result.getDate("termination_date"));
+                emp.setBirth_date(result.getDate("birth_date"));
+                emp.setBene_health_ins(result.getString("bene_health_ins"));
+                emp.setBene_life_ins(result.getString("bene_life_ins"));
+                emp.setBene_day_care(result.getString("bene_day_care"));
+                emp.setSex(result.getString("sex"));
+                emp.setDate_hired(result.getTimestamp("date_hired"));
+                emp.setFax(result.getString("fax"));
+                emp.setEmail(result.getString("email"));
+                emp.setWork_phone(result.getString("work_phone"));
+                emp.setExtension(result.getString("extension"));
+                emp.setJob_id(result.getInt("job_id"));
+                emp.setSales_branch_code(result.getInt("sales_branch_code"));
+                emp.setZip_code(result.getString("zip_code"));
+                employees.add(emp);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Kan gegevens niet ophalen " + ex);
+        }
+        //return ArrayList
         return employees;
     }
 }
