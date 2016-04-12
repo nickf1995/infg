@@ -13,6 +13,7 @@ public class Travel {
     private int travel_id;
     private int country;
     private String description;
+    private String country_name;
 
     public int getTravel_id() {
         return travel_id;
@@ -36,5 +37,25 @@ public class Travel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+     @Override
+    public String toString()
+    {
+        return(getCountry_name() + " - " + getDescription());
+    }
+
+    /**
+     * @return the country_name
+     */
+    public String getCountry_name() {
+        return country_name;
+    }
+
+    /**
+     * @param country_name the country_name to set
+     */
+    public void setCountry_name(String country_name) {
+        this.country_name = country_name;
     }
 }

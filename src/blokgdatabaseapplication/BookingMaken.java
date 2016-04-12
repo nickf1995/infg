@@ -7,6 +7,7 @@ package blokgdatabaseapplication;
 
 import Classes.Customer;
 import Classes.Employee;
+import Classes.Travel;
 import DatabaseControllers.MainController;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -19,22 +20,32 @@ import javax.swing.JList;
 public class BookingMaken extends javax.swing.JFrame {
 
     private final ArrayList<Customer> customers;
-    DefaultListModel<String> model;
+    private final ArrayList<Travel> travels;
+    private MainController mc = new MainController();
+    DefaultListModel<String> modelCustomer;
+    DefaultListModel<String> modelTravels;
     /**
      * Creates new form BookingMaken
      */
     public BookingMaken() {
         initComponents();
         
-        MainController mc = new MainController();
         customers = mc.getCustomers();
+        travels = mc.getTravels();
 
-        model = new DefaultListModel<String>();
+        modelCustomer = new DefaultListModel<String>();
         for (Customer c : customers) {
-            model.addElement(c.toString());
+            modelCustomer.addElement(c.toString());
         }
-        customerList.setModel(model);
+        customerList.setModel(modelCustomer);
         customerList.setSelectedIndex(0);
+        
+        modelTravels = new DefaultListModel<String>();
+        for (Travel t : travels) {
+            modelTravels.addElement(t.toString());
+        }
+        travelList.setModel(modelTravels);
+        travelList.setSelectedIndex(0);
     }
 
     /**
@@ -48,6 +59,9 @@ public class BookingMaken extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         customerList = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        travelList = new javax.swing.JList<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,25 +72,65 @@ public class BookingMaken extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(customerList);
 
+        travelList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(travelList);
+
+        jButton1.setText("Naar DB");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(362, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(292, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(179, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        int customerIndex = this.customerList.getSelectedIndex();
+        int travelIndex = this.travelList.getSelectedIndex();
+        int customer_id = customers.get(customerIndex).getCustomer_id();
+        int travel_id = travels.get(travelIndex).getTravel_id();
+        mc.createBooking(travel_id, customer_id);
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -115,6 +169,9 @@ public class BookingMaken extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> customerList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> travelList;
     // End of variables declaration//GEN-END:variables
 }
