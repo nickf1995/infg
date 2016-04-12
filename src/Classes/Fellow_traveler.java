@@ -57,4 +57,10 @@ public class Fellow_traveler {
     public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
+    
+    @Override
+    public String toString()
+    {
+        return(this.getFname() + " " + this.getLname());
+    }
 }

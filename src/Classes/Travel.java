@@ -10,6 +10,7 @@ package Classes;
  * @author Nick
  */
 public class Travel {
+
     private int travel_id;
     private int country;
     private String description;
@@ -38,11 +39,10 @@ public class Travel {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-     @Override
-    public String toString()
-    {
-        return(getCountry_name() + " - " + getDescription());
+
+    @Override
+    public String toString() {
+        return (getCountry_name() + " - " + getDescription());
     }
 
     /**

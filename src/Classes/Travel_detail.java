@@ -17,6 +17,7 @@ public class Travel_detail {
     private Date start_date;
     private Date end_date;
     private Double price;
+    private String country;
 
     public int getTravel_detail_id() {
         return travel_detail_id;
@@ -56,5 +57,25 @@ public class Travel_detail {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return(getTravel_detail_id() + " - " +getCountry());
+    }
+
+    /**
+     * @return the country
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * @param country the country to set
+     */
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

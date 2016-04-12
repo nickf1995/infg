@@ -2,7 +2,9 @@ package DatabaseControllers;
 
 import Classes.Employee;
 import Classes.Customer;
+import Classes.Fellow_traveler;
 import Classes.Travel;
+import Classes.Travel_detail;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -92,7 +94,7 @@ public class MainController {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Kan gegevens niet ophalen " + ex);
+            System.out.println("Kan gegevens niet ophalen van Employee" + ex);
         }
         //return ArrayList
         return employees;
@@ -117,7 +119,7 @@ public class MainController {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Kan gegevens niet ophalen " + ex);
+            System.out.println("Kan gegevens niet ophalen van Customer " + ex);
         }
         return customers;
     }
@@ -142,29 +144,69 @@ public class MainController {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Kan gegevens niet ophalen " + ex);
+            System.out.println("Kan gegevens niet ophalen van Travel " + ex);
         }
         return travels;
     }
 
-    public void createBooking(int travel_id, int customer_id) {
-        int travel_detail_id = 0;
-        // travel_detail maken
+    public ArrayList getTravel_detail() {
+        ArrayList travel_details = new ArrayList();
+
         try {
-            String query = " INSERT INTO Travel_detail (travel_id, start_date, end_date, price) VALUES (?, '2016-4-20', '2016-4-30', 100)";
+            String query = "SELECT td.travel_detail_id, td.travel_id, td.start_date, td.end_date, td.price, c.country FROM Travel_detail td JOIN Travel t ON td.travel_id = t.travel_id JOIN Country c ON t.country_id = c.country_id";
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
 
-            PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, travel_id);
-            statement.executeUpdate();
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                travel_detail_id = generatedKeys.getInt(1);
+            while (result.next()) {
+                Travel_detail td = new Travel_detail();
+
+                td.setTravel_detail_id(result.getInt("travel_detail_id"));
+//                td.setTravel(result.getString("travel_id"));
+                td.setStart_date(result.getDate("start_date"));
+                td.setEnd_date(result.getDate("end_date"));
+                td.setPrice(result.getDouble("price"));
+                td.setCountry(result.getString("country"));
+
+                travel_details.add(td);
             }
-        } catch (SQLException ex) {
-            System.out.println("Kan travel_detail niet aanmaken " + ex);
-        }
 
-        // huidige dag krijgen voor booking_date 
+        } catch (SQLException ex) {
+            System.out.println("Kan gegevens niet ophalen van Travel_detail " + ex);
+        }
+        return travel_details;
+    }
+
+    public ArrayList getFellow_travelers() {
+        ArrayList fellow_travelers = new ArrayList();
+
+        try {
+            String query = "SELECT * FROM Fellow_traveler";
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Fellow_traveler ft = new Fellow_traveler();
+
+                ft.setFellow_traveler_id(result.getInt("fellow_traveler_id"));
+                ft.setFname(result.getString("fname"));
+                ft.setLname(result.getString("lname"));
+                ft.setSex(result.getString("sex"));
+                ft.setBirthdate(result.getDate("birthdate"));
+
+                fellow_travelers.add(ft);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Kan gegevens niet ophalen van Fellow_traveler " + ex);
+        }
+        return fellow_travelers;
+    }
+
+    public void createBooking(int travel_detail_id, int customer_id, ArrayList<Integer> gaat_mee) {
+//        Booking id wat wordt ingevuld als de booking wordt gemaakt
+        int booking_id = 0;
+
+//        Huidige dag krijgen voor booking_date 
         Date d = new Date();
         java.sql.Date d1 = new java.sql.Date(d.getTime());
 
@@ -173,13 +215,74 @@ public class MainController {
             String query = "INSERT INTO Booking(travel_detail_id, customer_id, booking_date) VALUES (?, ?, ?)";
 
             PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, travel_detail_id); // set input parameter 1
-            statement.setInt(2, customer_id); // set input parameter 2
-            statement.setString(3, d1.toString()); // set input parameter 3
-            statement.executeUpdate(); // execute insert statement
+            statement.setInt(1, travel_detail_id);
+            statement.setInt(2, customer_id);
+            statement.setString(3, d1.toString());
+            statement.executeUpdate();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                booking_id = generatedKeys.getInt(1);
+            }
         } catch (SQLException ex) {
-            System.out.println("Kan booking niet aanmaken " + ex);
+            System.out.println("Kan Booking niet aanmaken " + ex);
         }
-    }
 
+        for (Integer i : gaat_mee) {
+            // booking_detail maken
+            try {
+                String query = "INSERT INTO Booking_detail(booking_id, fellow_traveler_id) VALUES (?, ?)";
+
+                PreparedStatement statement = databaseConnection.prepareStatement(query);
+                statement.setInt(1, booking_id);
+                statement.setInt(2, i);
+                statement.executeUpdate(); 
+//                ResultSet generatedKeys = statement.getGeneratedKeys();
+//                if (generatedKeys.next()) {
+//                    booking_id = generatedKeys.getInt(1);
+//                }
+            } catch (SQLException ex) {
+                System.out.println("Kan Booking_detail niet aanmaken " + ex);
+            }
+        }
+
+    }
+//        int travel_detail_id = 0;
+//        int booking_id = 0;
+//        
+//        // travel_detail maken
+//        try {
+//            String query = " INSERT INTO Travel_detail (travel_id, start_date, end_date, price) VALUES (?, '2016-4-20', '2016-4-30', 100)";
+//
+//            PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+//            statement.setInt(1, travel_id);
+//            statement.executeUpdate();
+//            ResultSet generatedKeys = statement.getGeneratedKeys();
+//            if (generatedKeys.next()) {
+//                travel_detail_id = generatedKeys.getInt(1);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Kan travel_detail niet aanmaken " + ex);
+//        }
+//
+//        // huidige dag krijgen voor booking_date 
+//        Date d = new Date();
+//        java.sql.Date d1 = new java.sql.Date(d.getTime());
+//
+//        // booking maken
+//        try {
+//            String query = "INSERT INTO Booking(travel_detail_id, customer_id, booking_date) VALUES (?, ?, ?)";
+//
+//            PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+//            statement.setInt(1, travel_detail_id); // set input parameter 1
+//            statement.setInt(2, customer_id); // set input parameter 2
+//            statement.setString(3, d1.toString()); // set input parameter 3
+//            statement.executeUpdate(); // execute insert statement
+//            ResultSet generatedKeys = statement.getGeneratedKeys();
+//            if (generatedKeys.next()) {
+//                booking_id = generatedKeys.getInt(1);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Kan booking niet aanmaken " + ex);
+//        }
+//    }
 }
