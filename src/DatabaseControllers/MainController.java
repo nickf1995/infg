@@ -1,6 +1,8 @@
 package DatabaseControllers;
 
 import Classes.Employee;
+import Classes.Customer;
+import Classes.Travel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -45,7 +47,7 @@ public class MainController {
      * In de query zou ik zelf een LIMIT 10 doen o.i.d.
      * @return ArrayList
      */
-public ArrayList getEmployees() {
+    public ArrayList getEmployees() {
         ArrayList employees = new ArrayList();
         
         try {
@@ -92,4 +94,57 @@ public ArrayList getEmployees() {
         //return ArrayList
         return employees;
     }
+
+        public ArrayList getCustomers() 
+        {
+            ArrayList customers = new ArrayList();
+            
+            try {
+            String query = "SELECT * FROM Customer";
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+            
+            while(result.next())
+            {
+                Customer customer = new Customer();
+                
+                customer.setCustomer_id(result.getInt("customer_id"));
+                customer.setFname(result.getString("fname"));
+                customer.setLname(result.getString("lname"));
+                
+                customers.add(customer);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Kan gegevens niet ophalen " + ex);
+        }
+            return customers;
+        }
+        
+        public ArrayList getTravels() 
+        {
+            ArrayList travels = new ArrayList();
+            
+            try {
+            String query = "SELECT * FROM Travel";
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+            
+            while(result.next())
+            {
+                Travel travel = new Travel();
+                
+                travel.setTravel_id(result.getInt("travel_id"));
+                travel.setCountry(result.getInt("country_id"));
+                travel.setDescription(result.getString("description"));
+                
+                travels.add(travel);
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Kan gegevens niet ophalen " + ex);
+        }
+            return travels;
+        }
+        
 }

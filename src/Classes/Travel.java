@@ -11,7 +11,7 @@ package Classes;
  */
 public class Travel {
     private int travel_id;
-    private Country country;
+    private int country;
     private String description;
 
     public int getTravel_id() {
@@ -22,11 +22,11 @@ public class Travel {
         this.travel_id = travel_id;
     }
 
-    public Country getCountry() {
+    public int getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(int country) {
         this.country = country;
     }
 

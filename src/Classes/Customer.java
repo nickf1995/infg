@@ -102,4 +102,10 @@ public class Customer {
     public void setSex(String sex) {
         this.sex = sex;
     }
+    
+    @Override
+    public String toString()
+    {
+        return(getFname() + " " + getLname());
+    }
 }
