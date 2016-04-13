@@ -11,8 +11,10 @@ import Classes.Fellow_traveler;
 import Classes.Travel;
 import Classes.Travel_detail;
 import DatabaseControllers.MainController;
+import java.awt.List;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
@@ -26,10 +28,11 @@ public class BookingMaken extends javax.swing.JFrame {
     private final ArrayList<Customer> customers;
     private final ArrayList<Travel_detail> travel_details;
     private final ArrayList<Fellow_traveler> fellow_travelers;
-    private ArrayList<Integer> gaat_mee;
+    private HashSet<Fellow_traveler> gaat_mee;
     DefaultListModel<String> modelCustomer;
     DefaultListModel<String> modelTravel_details;
     DefaultListModel<String> modelFellow_travelers;
+    DefaultListModel<String> modelGaat_mee;
 
     /**
      * Creates new form BookingMaken
@@ -40,7 +43,7 @@ public class BookingMaken extends javax.swing.JFrame {
         customers = mc.getCustomers();
         travel_details = mc.getTravel_detail();
         fellow_travelers = mc.getFellow_travelers();
-        gaat_mee = new ArrayList();
+        gaat_mee = new HashSet();
 
         modelCustomer = new DefaultListModel<String>();
         for (Customer c : customers) {
@@ -62,6 +65,10 @@ public class BookingMaken extends javax.swing.JFrame {
         }
         fellowTravelerList.setModel(modelFellow_travelers);
         fellowTravelerList.setSelectedIndex(0);
+        
+        modelGaat_mee = new DefaultListModel<String>();
+        gaatMeeList.setModel(modelGaat_mee);
+        gaatMeeList.setSelectedIndex(0);
 
     }
 
@@ -74,6 +81,7 @@ public class BookingMaken extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         customerList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -91,6 +99,16 @@ public class BookingMaken extends javax.swing.JFrame {
         jl_EindText = new javax.swing.JLabel();
         jl_Eind = new javax.swing.JLabel();
         jl_Start = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        gaatMeeList = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
+        jb_delete = new javax.swing.JButton();
+        jlLandText = new javax.swing.JLabel();
+        jl_Land = new javax.swing.JLabel();
+        jl_BoekerText = new javax.swing.JLabel();
+        jl_Boeker = new javax.swing.JLabel();
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,6 +116,11 @@ public class BookingMaken extends javax.swing.JFrame {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        customerList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                customerListValueChanged(evt);
+            }
         });
         jScrollPane1.setViewportView(customerList);
 
@@ -157,38 +180,75 @@ public class BookingMaken extends javax.swing.JFrame {
 
         jl_Start.setText("(startdatum)");
 
+        jScrollPane4.setViewportView(gaatMeeList);
+
+        jLabel3.setText("Gaan mee");
+
+        jb_delete.setText("Verwijder");
+        jb_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_deleteActionPerformed(evt);
+            }
+        });
+
+        jlLandText.setText("Land:");
+
+        jl_Land.setText("(landnaam)");
+
+        jl_BoekerText.setText("Boeker:");
+
+        jl_Boeker.setText("(naam)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(47, 47, 47)
+                        .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jl_EindText)
-                                    .addComponent(jl_StartText)
-                                    .addComponent(jlPrijsText))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jl_BoekerText)
+                                            .addComponent(jl_EindText)
+                                            .addComponent(jl_StartText)
+                                            .addComponent(jlPrijsText)
+                                            .addComponent(jlLandText))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jl_Boeker)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(1, 1, 1)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jl_Prijs)
+                                                    .addComponent(jl_Start)
+                                                    .addComponent(jl_Eind)))
+                                            .addComponent(jl_Land)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jb_gaatMee)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4)))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jl_Prijs)
-                                    .addComponent(jl_Start)
-                                    .addComponent(jl_Eind)))
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel4)
-                    .addComponent(jb_gaatMee)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(88, Short.MAX_VALUE))
+                                    .addComponent(jb_delete)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,10 +258,19 @@ public class BookingMaken extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2)
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jl_BoekerText)
+                            .addComponent(jl_Boeker))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlLandText)
+                            .addComponent(jl_Land))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jl_Prijs)
                             .addComponent(jlPrijsText))
@@ -212,16 +281,24 @@ public class BookingMaken extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jl_EindText)
-                            .addComponent(jl_Eind))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
-                .addGap(62, 62, 62)
-                .addComponent(jLabel4)
+                            .addComponent(jl_Eind))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jb_gaatMee)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jb_gaatMee)
+                    .addComponent(jb_delete))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -241,21 +318,46 @@ public class BookingMaken extends javax.swing.JFrame {
 
     private void jb_gaatMeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_gaatMeeActionPerformed
         int ft_index = fellowTravelerList.getSelectedIndex();
-        System.out.println(fellow_travelers.get(ft_index).getFellow_traveler_id());
-        gaat_mee.add(fellow_travelers.get(ft_index).getFellow_traveler_id());
+        gaat_mee.add(fellow_travelers.get(ft_index));
+        updateGaatMee();
     }//GEN-LAST:event_jb_gaatMeeActionPerformed
 
+    private void updateGaatMee() {
+        modelGaat_mee.clear();
+        for (Fellow_traveler ft : gaat_mee) {
+            modelGaat_mee.addElement(ft.toString());
+        }
+    }
+    
     private void travelDetailListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_travelDetailListValueChanged
         if (!evt.getValueIsAdjusting()) {
             int travel_detail_index = this.travelDetailList.getSelectedIndex();
+            String land = travel_details.get(travel_detail_index).getCountry();
             double travel_price = travel_details.get(travel_detail_index).getPrice();
             Date start_date = travel_details.get(travel_detail_index).getStart_date();
             Date end_date = travel_details.get(travel_detail_index).getEnd_date();
+            jl_Land.setText(land);
             jl_Prijs.setText(Double.toString(travel_price));
             jl_Start.setText(start_date.toString());
             jl_Eind.setText(end_date.toString());
         }
     }//GEN-LAST:event_travelDetailListValueChanged
+
+    private void jb_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_deleteActionPerformed
+        int ft_index = gaatMeeList.getSelectedIndex();
+        ArrayList<Fellow_traveler> delete_array = new ArrayList<>(gaat_mee);
+        Fellow_traveler delete = delete_array.get(ft_index);
+        gaat_mee.remove(delete);
+        updateGaatMee();
+    }//GEN-LAST:event_jb_deleteActionPerformed
+
+    private void customerListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_customerListValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            int customer_index = this.customerList.getSelectedIndex();
+            String customer_name = customers.get(customer_index).toString();
+            jl_Boeker.setText(customer_name);
+        }
+    }//GEN-LAST:event_customerListValueChanged
 
     /**
      * @param args the command line arguments
@@ -295,17 +397,26 @@ public class BookingMaken extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> customerList;
     private javax.swing.JList<String> fellowTravelerList;
+    private javax.swing.JList<String> gaatMeeList;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jb_delete;
     private javax.swing.JButton jb_gaatMee;
+    private javax.swing.JLabel jlLandText;
     private javax.swing.JLabel jlPrijsText;
+    private javax.swing.JLabel jl_Boeker;
+    private javax.swing.JLabel jl_BoekerText;
     private javax.swing.JLabel jl_Eind;
     private javax.swing.JLabel jl_EindText;
+    private javax.swing.JLabel jl_Land;
     private javax.swing.JLabel jl_Prijs;
     private javax.swing.JLabel jl_Start;
     private javax.swing.JLabel jl_StartText;

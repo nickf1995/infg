@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 
 /**
  *
@@ -202,7 +203,7 @@ public class MainController {
         return fellow_travelers;
     }
 
-    public void createBooking(int travel_detail_id, int customer_id, ArrayList<Integer> gaat_mee) {
+    public void createBooking(int travel_detail_id, int customer_id, HashSet<Fellow_traveler> gaat_mee) {
 //        Booking id wat wordt ingevuld als de booking wordt gemaakt
         int booking_id = 0;
 
@@ -227,62 +228,20 @@ public class MainController {
             System.out.println("Kan Booking niet aanmaken " + ex);
         }
 
-        for (Integer i : gaat_mee) {
+        for (Fellow_traveler ft : gaat_mee) {
             // booking_detail maken
             try {
                 String query = "INSERT INTO Booking_detail(booking_id, fellow_traveler_id) VALUES (?, ?)";
 
                 PreparedStatement statement = databaseConnection.prepareStatement(query);
                 statement.setInt(1, booking_id);
-                statement.setInt(2, i);
+                statement.setInt(2, ft.getFellow_traveler_id());
                 statement.executeUpdate(); 
-//                ResultSet generatedKeys = statement.getGeneratedKeys();
-//                if (generatedKeys.next()) {
-//                    booking_id = generatedKeys.getInt(1);
-//                }
             } catch (SQLException ex) {
                 System.out.println("Kan Booking_detail niet aanmaken " + ex);
             }
         }
 
     }
-//        int travel_detail_id = 0;
-//        int booking_id = 0;
-//        
-//        // travel_detail maken
-//        try {
-//            String query = " INSERT INTO Travel_detail (travel_id, start_date, end_date, price) VALUES (?, '2016-4-20', '2016-4-30', 100)";
-//
-//            PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-//            statement.setInt(1, travel_id);
-//            statement.executeUpdate();
-//            ResultSet generatedKeys = statement.getGeneratedKeys();
-//            if (generatedKeys.next()) {
-//                travel_detail_id = generatedKeys.getInt(1);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Kan travel_detail niet aanmaken " + ex);
-//        }
-//
-//        // huidige dag krijgen voor booking_date 
-//        Date d = new Date();
-//        java.sql.Date d1 = new java.sql.Date(d.getTime());
-//
-//        // booking maken
-//        try {
-//            String query = "INSERT INTO Booking(travel_detail_id, customer_id, booking_date) VALUES (?, ?, ?)";
-//
-//            PreparedStatement statement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-//            statement.setInt(1, travel_detail_id); // set input parameter 1
-//            statement.setInt(2, customer_id); // set input parameter 2
-//            statement.setString(3, d1.toString()); // set input parameter 3
-//            statement.executeUpdate(); // execute insert statement
-//            ResultSet generatedKeys = statement.getGeneratedKeys();
-//            if (generatedKeys.next()) {
-//                booking_id = generatedKeys.getInt(1);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Kan booking niet aanmaken " + ex);
-//        }
-//    }
+
 }
