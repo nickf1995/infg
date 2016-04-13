@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +28,7 @@ public class BookingMaken extends javax.swing.JFrame {
     private MainController mc = new MainController();
     private final ArrayList<Customer> customers;
     private final ArrayList<Travel_detail> travel_details;
-    private final ArrayList<Fellow_traveler> fellow_travelers;
+    private ArrayList<Fellow_traveler> fellow_travelers;
     private HashSet<Fellow_traveler> gaat_mee;
     DefaultListModel<String> modelCustomer;
     DefaultListModel<String> modelTravel_details;
@@ -65,11 +66,19 @@ public class BookingMaken extends javax.swing.JFrame {
         }
         fellowTravelerList.setModel(modelFellow_travelers);
         fellowTravelerList.setSelectedIndex(0);
-        
+
         modelGaat_mee = new DefaultListModel<String>();
         gaatMeeList.setModel(modelGaat_mee);
         gaatMeeList.setSelectedIndex(0);
 
+    }
+    
+    private void updateFellow_travelers() {
+        modelFellow_travelers.clear();
+        fellow_travelers = mc.getFellow_travelers();
+        for (Fellow_traveler ft : fellow_travelers) {
+            modelFellow_travelers.addElement(ft.toString());
+        }
     }
 
     /**
@@ -82,6 +91,7 @@ public class BookingMaken extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         customerList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -107,6 +117,18 @@ public class BookingMaken extends javax.swing.JFrame {
         jl_Land = new javax.swing.JLabel();
         jl_BoekerText = new javax.swing.JLabel();
         jl_Boeker = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        tf_fname = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        tf_lname = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
+        tf_birthday = new javax.swing.JTextField();
+        jb_medereiziger = new javax.swing.JButton();
 
         jTextField1.setText("jTextField1");
 
@@ -199,15 +221,75 @@ public class BookingMaken extends javax.swing.JFrame {
 
         jl_Boeker.setText("(naam)");
 
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Medereiziger toevoegen");
+
+        jLabel6.setText("Voornaam");
+
+        tf_fname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_fnameActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Achternaam");
+
+        jLabel8.setText("Geslacht");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
+        jRadioButton1.setText("Man");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("Vrouw");
+
+        jLabel9.setText("Geboortedatum (jjjj-mm-dd)");
+
+        tf_birthday.setText("1980-01-01");
+
+        jb_medereiziger.setText("Toevoegen");
+        jb_medereiziger.setToolTipText("");
+        jb_medereiziger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_medereizigerActionPerformed(evt);
+            }
+        });
+        jb_medereiziger.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jb_medereizigerKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jb_delete)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -234,71 +316,97 @@ public class BookingMaken extends javax.swing.JFrame {
                                                     .addComponent(jl_Start)
                                                     .addComponent(jl_Eind)))
                                             .addComponent(jl_Land)))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jb_gaatMee)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4)))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jb_delete)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                            .addComponent(jb_gaatMee))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6)
+                            .addComponent(tf_fname)
+                            .addComponent(jLabel7)
+                            .addComponent(tf_lname)
+                            .addComponent(jLabel8)
+                            .addComponent(jRadioButton1)
+                            .addComponent(jRadioButton2)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tf_birthday)
+                            .addComponent(jb_medereiziger, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2)
-                        .addComponent(jScrollPane1))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jl_BoekerText)
-                            .addComponent(jl_Boeker))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlLandText)
-                            .addComponent(jl_Land))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jl_Prijs)
-                            .addComponent(jlPrijsText))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jl_StartText)
-                            .addComponent(jl_Start))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jl_EindText)
-                            .addComponent(jl_Eind))))
-                .addGap(18, 18, 18)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane2)
+                                        .addComponent(jScrollPane1))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jl_BoekerText)
+                                            .addComponent(jl_Boeker))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jlLandText)
+                                            .addComponent(jl_Land))
+                                        .addGap(40, 40, 40)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jl_Prijs)
+                                            .addComponent(jlPrijsText))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jl_StartText)
+                                            .addComponent(jl_Start))
+                                        .addGap(9, 9, 9)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jl_EindText)
+                                            .addComponent(jl_Eind))))
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane4)
+                                    .addComponent(jScrollPane3)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRadioButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tf_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jb_medereiziger)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jb_gaatMee)
                     .addComponent(jb_delete))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addGap(30, 30, 30))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -313,7 +421,7 @@ public class BookingMaken extends javax.swing.JFrame {
         int travel_detail_index = this.travelDetailList.getSelectedIndex();
         int customer_id = customers.get(customer_index).getCustomer_id();
         int travel_detail_id = travel_details.get(travel_detail_index).getTravel_detail_id();
-        mc.createBooking(travel_detail_id, customer_id, gaat_mee);
+        JOptionPane.showMessageDialog(this, "Reis naar " + travel_details.get(travel_detail_index).getCountry() + " geboekt met booking id " + mc.createBooking(travel_detail_id, customer_id, gaat_mee) +".");
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jb_gaatMeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_gaatMeeActionPerformed
@@ -328,7 +436,7 @@ public class BookingMaken extends javax.swing.JFrame {
             modelGaat_mee.addElement(ft.toString());
         }
     }
-    
+
     private void travelDetailListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_travelDetailListValueChanged
         if (!evt.getValueIsAdjusting()) {
             int travel_detail_index = this.travelDetailList.getSelectedIndex();
@@ -358,6 +466,40 @@ public class BookingMaken extends javax.swing.JFrame {
             jl_Boeker.setText(customer_name);
         }
     }//GEN-LAST:event_customerListValueChanged
+
+    private void tf_fnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_fnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_fnameActionPerformed
+
+    private void jb_medereizigerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jb_medereizigerKeyPressed
+
+    }//GEN-LAST:event_jb_medereizigerKeyPressed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jb_medereizigerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_medereizigerActionPerformed
+        String fname = tf_fname.getText();
+        String lname = tf_lname.getText();
+        String sex = null;
+        if (jRadioButton1.isSelected()) {
+            sex = "M";
+        } else {
+            sex = "F";
+        }
+        String birthday = tf_birthday.getText();
+        if (!fname.equals("") && !lname.equals("") && !birthday.equals("")) {
+            if (mc.createFellow_traveler(fname, lname, sex, birthday)) {
+                JOptionPane.showMessageDialog(this, "Medereiziger is toegevoegd.");
+                updateFellow_travelers();
+            } else {
+                JOptionPane.showMessageDialog(this, "Medereiziger is niet toegevoegd.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Velden incompleet.");
+        }
+    }//GEN-LAST:event_jb_medereizigerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -395,6 +537,7 @@ public class BookingMaken extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JList<String> customerList;
     private javax.swing.JList<String> fellowTravelerList;
     private javax.swing.JList<String> gaatMeeList;
@@ -403,13 +546,22 @@ public class BookingMaken extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jb_delete;
     private javax.swing.JButton jb_gaatMee;
+    private javax.swing.JButton jb_medereiziger;
     private javax.swing.JLabel jlLandText;
     private javax.swing.JLabel jlPrijsText;
     private javax.swing.JLabel jl_Boeker;
@@ -420,6 +572,9 @@ public class BookingMaken extends javax.swing.JFrame {
     private javax.swing.JLabel jl_Prijs;
     private javax.swing.JLabel jl_Start;
     private javax.swing.JLabel jl_StartText;
+    private javax.swing.JTextField tf_birthday;
+    private javax.swing.JTextField tf_fname;
+    private javax.swing.JTextField tf_lname;
     private javax.swing.JList<String> travelDetailList;
     // End of variables declaration//GEN-END:variables
 }

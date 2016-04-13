@@ -203,7 +203,7 @@ public class MainController {
         return fellow_travelers;
     }
 
-    public void createBooking(int travel_detail_id, int customer_id, HashSet<Fellow_traveler> gaat_mee) {
+    public int createBooking(int travel_detail_id, int customer_id, HashSet<Fellow_traveler> gaat_mee) {
 //        Booking id wat wordt ingevuld als de booking wordt gemaakt
         int booking_id = 0;
 
@@ -241,7 +241,26 @@ public class MainController {
                 System.out.println("Kan Booking_detail niet aanmaken " + ex);
             }
         }
+        return booking_id;
 
+    }
+    
+    public boolean createFellow_traveler(String fname, String lname, String sex, String birthdate) {
+        // Fellow_traveler maken
+        try {
+            String query = "INSERT INTO Fellow_traveler(fname, lname, sex, birthdate) VALUES (?, ?, ?, ?)";
+
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            statement.setString(1, fname);
+            statement.setString(2, lname);
+            statement.setString(3, sex);
+            statement.setString(4, birthdate);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Kan Fellow_traveler niet aanmaken " + ex);
+            return false;
+        }
+        return true;
     }
 
 }
